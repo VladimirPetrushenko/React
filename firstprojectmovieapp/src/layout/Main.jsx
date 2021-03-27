@@ -17,25 +17,37 @@ class Main extends React.Component{
     }
     
     componentDidMount(){
-        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
+        fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
             .then(resp => resp.json())
-            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults, loading: false}));
+            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults, loading: false}))
+            .catch((error)=>{
+                console.error(error);
+                this.setState({loading:false});
+            });
     }
 
     searchMovies = (name, type) =>{
         this.setState({loading:true})
         this.setState({name: name,type: type})
-        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${name}&type=${type}&page=${this.state.pages}`)
+        fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${name}&type=${type}&page=${this.state.pages}`)
             .then(resp => resp.json())
-            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults,loading: false}));
+            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults,loading: false}))
+            .catch((error)=>{
+                console.error(error);
+                this.setState({loading:false});
+            });
     }
 
     changePages = (page) => {
         this.setState({pages: page}, 
             ( () => 
-                fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${this.state.name}&type=${this.state.type}&page=${this.state.pages}`)
+                fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${this.state.name}&type=${this.state.type}&page=${this.state.pages}`)
                 .then(resp => resp.json())
                 .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults}))
+                .catch((error)=>{
+                    console.error(error);
+                    this.setState({loading:false});
+                })
             )
         );
         
