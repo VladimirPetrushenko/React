@@ -1,3 +1,4 @@
+<<<<<<< ceb397cdc628a383eed3dfa0e7446df65c7c3e78
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +69,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+=======
+Сделан сайт по поиску фильмов на английском языке. Использовался API: omdbapi. Поиск производиться только на английском языке, странички переключаются, все реализовано на ReactJS
+https://vladimirpetrushenko.github.io/React/
+>>>>>>> add Readme.md
