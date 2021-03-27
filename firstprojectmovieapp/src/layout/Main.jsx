@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import {Movies} from '../components/Movies'
 import {Preloader} from '../components/Preloader'
 import {Search} from '../components/Search'
@@ -6,70 +6,57 @@ import {Pagination} from '../components/Pagination'
 
 const API_KEY = process.env.REACT_APP_API_KEY
 
-class Main extends React.Component{
-    state = {
-        movies:[],
-        pages: 1,
-        totalResults: 0,
-        name:'matrix',
-        type:'',
-        loading: true,
-    }
+const Main = () =>{
+    const [movies, setMovies] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [pages, setPages] = useState(1);
+    const [name, setName] = useState('matrix');
+    const [type, setType] = useState('');
+    const [loading, setLoading] = useState(true);
+
     
-    componentDidMount(){
-        fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
-            .then(resp => resp.json())
-            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults, loading: false}))
-            .catch((error)=>{
-                console.error(error);
-                this.setState({loading:false});
-            });
+
+    const searchMovies = (nameIn, typeIn) =>{
+        setLoading(true);
+        setName(()=>nameIn);
+        setType(()=>typeIn); 
     }
 
-    searchMovies = (name, type) =>{
-        this.setState({loading:true})
-        this.setState({name: name,type: type})
-        fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${name}&type=${type}&page=${this.state.pages}`)
-            .then(resp => resp.json())
-            .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults,loading: false}))
-            .catch((error)=>{
-                console.error(error);
-                this.setState({loading:false});
-            });
+    const changePages = (page) => {
+        setLoading(true);
+        setPages( () =>page );
     }
 
-    changePages = (page) => {
-        this.setState({pages: page}, 
-            ( () => 
-                fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${this.state.name}&type=${this.state.type}&page=${this.state.pages}`)
-                .then(resp => resp.json())
-                .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults}))
-                .catch((error)=>{
-                    console.error(error);
-                    this.setState({loading:false});
-                })
-            )
-        );
-        
+    const countPages = [];
+    for (let index = 0; index < total/10; index++) {
+        countPages[index] = index + 1;
     }
-    render(){
-        const {movies, totalResults,loading} = this.state;
-        const countPages = [];
-        for (let index = 0; index < totalResults/10; index++) {
-            countPages[index] = index + 1;
-        }
-        return <main className="container content">
-            <Search searchMovies={this.searchMovies}/>
-            {
-            !loading ? 
+
+    useEffect(()=>{
+        fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${name}${type==='' ? '' : `&type=${type}`}${pages>1 ? `&page=${pages}` : ''}`)
+        .then(resp => resp.json())
+        .then(data=>{
+                setMovies(data.Search);
+                setTotal(data.totalResults);
+                setLoading(false);
+            }   
+        )
+        .catch((error)=>{
+            console.error(error);
+            setLoading(false);
+        });
+    }, [name,type,pages]);
+
+    return <main className="container content">
+        <Search searchMovies={searchMovies}/>
+        {
+        !loading ? 
             <Movies movies ={movies} />  : 
             <Preloader />
-            }
-            <Pagination count = {countPages} nextPage = {this.changePages} />
-        </main>
-    }
-
-    
+        }
+        <Pagination count = {countPages} nextPage = {changePages} />
+    </main>
 }
+
 
 export {Main}
