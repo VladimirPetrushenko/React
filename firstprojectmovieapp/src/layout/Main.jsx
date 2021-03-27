@@ -17,7 +17,7 @@ class Main extends React.Component{
     }
     
     componentDidMount(){
-        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}=matrix`)
+        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=matrix`)
             .then(resp => resp.json())
             .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults, loading: false}));
     }
@@ -25,7 +25,7 @@ class Main extends React.Component{
     searchMovies = (name, type) =>{
         this.setState({loading:true})
         this.setState({name: name,type: type})
-        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}=${name}&type=${type}&page=${this.state.pages}`)
+        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${name}&type=${type}&page=${this.state.pages}`)
             .then(resp => resp.json())
             .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults,loading: false}));
     }
@@ -33,7 +33,7 @@ class Main extends React.Component{
     changePages = (page) => {
         this.setState({pages: page}, 
             ( () => 
-                fetch(`http://www.omdbapi.com/?apikey=${API_KEY}=${this.state.name}&type=${this.state.type}&page=${this.state.pages}`)
+                fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${this.state.name}&type=${this.state.type}&page=${this.state.pages}`)
                 .then(resp => resp.json())
                 .then(data=>this.setState({movies: data.Search,totalResults: data.totalResults}))
             )
