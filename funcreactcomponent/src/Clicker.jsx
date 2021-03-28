@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react/cjs/react.development';
 
 function Clicker() {
     const [count, setCount] = useState(0);
@@ -34,6 +35,10 @@ function Clicker() {
         return () => clearInterval(interval);
     },[isStart, isReset, count]);
 
+    useEffect(()=>{
+        console.log('first string');
+        return () => console.log('second string');
+    },[]);
     return (
         <div className="Clicker">
             {

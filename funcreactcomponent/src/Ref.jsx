@@ -3,14 +3,9 @@ import React, {useEffect, useRef} from 'react'
 const WithRef = () => {
     const inputEl = useRef(null);
 
-    console.log(inputEl);
     const numRef = useRef(0);
 
 
-    useEffect(()=>{
-        console.log(inputEl);
-        console.log(numRef.current);
-    });
     
     const handleClick = () =>{
         numRef.current = 1;
