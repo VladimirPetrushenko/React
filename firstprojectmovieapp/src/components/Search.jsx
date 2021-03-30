@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-
+import { useContext } from 'react';
+import { MainContext } from '../context/MainContext';
 const Search = (props) => {
-    const { searchMovies = Function.prototype } = props;
-
-    const [search, setSearch] = useState('');
-    const [type, setType] = useState('');
+    const {
+        searchMovies = Function.prototype,
+        name,
+        search,
+        type,
+        setSearch,
+        setType,
+    } = useContext(MainContext);
 
     const handleChange = (event) => {
         setSearch(event.target.value);
     };
 
     const handleChangeRadioButton = (event) => {
-        setType((prevType) => {
-            searchMovies(search, event.target.value);
-            return event.target.value;
-        });
+        search
+            ? searchMovies(search, event.target.value)
+            : searchMovies(name, event.target.value);
+        setType(event.target.value);
     };
 
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter') searchMovies(search, type);
+        if (event.key === 'Enter' && name !== search)
+            searchMovies(search, type);
     };
 
     return (
@@ -34,7 +39,9 @@ const Search = (props) => {
             />
             <button
                 className="btn search-btn"
-                onClick={() => searchMovies(search, type)}
+                onClick={() => {
+                    if (name !== search) searchMovies(search, type);
+                }}
             >
                 Send
             </button>

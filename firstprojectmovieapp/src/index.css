@@ -30,5 +30,13 @@ nav {
   margin: 0 100px 0 0;
 }
 .pagination_bottom{
-  margin-left: 250px;
+  text-align: center;
+}
+.image-movie{
+  margin-top: 1%;
+}
+.pagination{
+  color: black;
+  padding: 0 0.5rem;
+  width: auto;
 }
